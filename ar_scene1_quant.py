@@ -52,7 +52,7 @@ def ar_h_1(initial,eps=0.01,max_iter=10000):
         pcheck=abs(diff)
         count+=1
     print('num of iter=',count)
-    print('magnitude of gradient=',p)
+    print('magnitude of gradient=',pcheck)
     print('time taken=',time.time()-start)
     return xn
 
