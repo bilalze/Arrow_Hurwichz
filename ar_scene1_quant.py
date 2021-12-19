@@ -3,8 +3,7 @@ import time
 from math import erf,sqrt
 from scipy import stats
 
-def phi(x, mu, sigma):
-     return (1 + erf((x - mu) / sigma / sqrt(2))) / 2
+
 
 
 def ar_h_1(initial,eps=0.01,max_iter=10000):
@@ -34,18 +33,23 @@ def ar_h_1(initial,eps=0.01,max_iter=10000):
     deriv=lambda x,y,l,p:(-2/(x**3))+l*(-2*(stats.norm(y,x).ppf((p+1)/2)-y)*((stats.norm(y,x).ppf((p+1)/2)-y)/(x**2)))
     cons=lambda x,y,a,p:(stats.norm(y,x).ppf((p+1)/2)-y)**2-a
     #intialize looping variables and get intial guess
-    p=10
+    pcheck=10
     count=0
     #run loop
     start=time.time()
     #break look if gradient is very or max iter reached 
-    while p>0.00001 and count<max_iter:
+    while pcheck>0.00001 and count<max_iter:
         diff=deriv(xn,yn,ln,pn)
+        #find next lambda
+        # aa=(-2/(xn**3))
+        # bb=-2*(stats.norm(yn,xn).ppf((pn+1)/2)-yn)
+        # cc=(stats.norm(yn,xn).ppf((pn+1)/2)-yn)/(xn**2)
+        # dd=bb*cc
         ln=max(0,ln+eps*cons(xn,yn,an,pn))
         #find next theta
         xn=xn-eps*diff
         #magnitude of gradient
-        p=abs(diff)
+        pcheck=abs(diff)
         count+=1
     print('num of iter=',count)
     print('magnitude of gradient=',p)
